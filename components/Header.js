@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import HomeLogo from './svg/home';
+import Link from 'next/link';
 import Navbar from './Navbar';
 
 export default function Header({ title }) {
@@ -17,7 +17,11 @@ export default function Header({ title }) {
       </Head>
       <div className='fixed z-50 w-screen flex justify-between bg-black text-white shadow-md h-16'>
         <div className='mt-3 ml-3'>
-          <HomeLogo />
+          <Link href='/'>
+            <a className='text-2xl font-bold' aria-label='Home'>
+              Home
+            </a>
+          </Link>
         </div>
         <div className='m-4'>
           <Navbar />
