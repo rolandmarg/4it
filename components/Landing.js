@@ -5,13 +5,13 @@ import useVisible from './UseVisible';
 export default function Landing({ testimonials }) {
   return (
     <>
-      <MostImportantDivInYourLife />
+      <Banana />
       <Testimonials data={testimonials} />
     </>
   );
 }
 
-function MostImportantDivInYourLife() {
+function Banana() {
   const { isVisible, setIsVisible, ref } = useVisible(false);
 
   return (
