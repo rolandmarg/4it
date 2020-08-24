@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import { useState } from 'react';
 import Transition from './Transition';
+import useVisible from './UseVisible';
 
 export default function Navbar() {
   return (
@@ -34,13 +34,13 @@ function NavHorizontal() {
 }
 
 function NavVertical() {
-  const [isOpen, setIsOpen] = useState(false);
+  const { ref, isVisible, setIsVisible } = useVisible(false);
 
   return (
-    <>
+    <div ref={ref}>
       <button
         type='button'
-        onClick={() => setIsOpen((prevState) => !prevState)}
+        onClick={() => setIsVisible((prevState) => !prevState)}
         className='focus:outline-none transition duration-150 ease-in-out'
         id='main-menu'
         aria-label='Main menu'
@@ -62,7 +62,7 @@ function NavVertical() {
       </button>
 
       <Transition
-        show={isOpen}
+        show={isVisible}
         appear={true}
         enter='transition ease-out duration-100 transform'
         enterFrom='opacity-0 scale-95'
@@ -82,6 +82,6 @@ function NavVertical() {
           </nav>
         </div>
       </Transition>
-    </>
+    </div>
   );
 }
