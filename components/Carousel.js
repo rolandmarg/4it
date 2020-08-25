@@ -68,11 +68,11 @@ export default function Carousel({ children }) {
         <div className='flex justify-center items-center'>
           <LeftArrow prev={prev} />
           <div className='flex'>
-            <div className='z-10 hidden lg:block lg:transform lg:scale-90'>
+            <div className='hidden lg:block lg:transform lg:scale-90'>
               {childArray.length > 2 && childArray[getPrevIdx(activeIdx)]}
             </div>
-            <div className='z-20 lg:shadow-xl'>{childArray[activeIdx]}</div>
-            <div className='z-10 hidden lg:block lg:transform lg:scale-90'>
+            <div className='lg:shadow-xl'>{childArray[activeIdx]}</div>
+            <div className='hidden lg:block lg:transform lg:scale-90'>
               {childArray.length > 2 && childArray[getNextIdx(activeIdx)]}
             </div>
           </div>

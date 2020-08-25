@@ -1,7 +1,9 @@
-import { useFormik } from 'formik';
+import { Formik, Form } from 'formik';
+import * as Yup from 'yup';
 import Modal from './Modal';
 import Testimonials from './Testimonials';
 import useVisible from './UseVisible';
+import { TextInput } from './Forms';
 
 export default function Landing({ testimonials }) {
   return (
@@ -11,29 +13,50 @@ export default function Landing({ testimonials }) {
     </>
   );
 }
-const SignupForm = () => {
-  // Pass the useFormik() hook initial form values and a submit function that will
-  // be called when the form is submitted
-  const formik = useFormik({
-    initialValues: {
-      email: '',
-    },
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
-    },
-  });
+
+const SubscribeForm = ({ setIsVisible }) => {
   return (
-    <form onSubmit={formik.handleSubmit}>
-      <label htmlFor='email'>Email Address</label>
-      <input
-        id='email'
-        name='email'
-        type='email'
-        onChange={formik.handleChange}
-        value={formik.values.email}
-      />
-      <button type='submit'>Submit</button>
-    </form>
+    <Formik
+      initialValues={{ firstName: '', lastName: '', email: '' }}
+      validationSchema={Yup.object({
+        firstName: Yup.string().max(32, 'Must be 32 characters or less'),
+        lastName: Yup.string().max(64, 'Must be 64 characters or less'),
+        email: Yup.string().email('Invalid email address').required('Required'),
+      })}
+      onSubmit={(values, { setSubmitting }) => {
+        setTimeout(() => {
+          alert(JSON.stringify(values, null, 2));
+          setSubmitting(false);
+        }, 400);
+      }}
+    >
+      <Form>
+        <div className='p-4'>
+          <TextInput label='First Name' name='fistName' type='text' />
+          <TextInput label='Last Name' name='lastName' type='text' />
+          <TextInput label='Email Address' name='email' type='email' />
+        </div>
+        <div className='bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse'>
+          <span className='flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto'>
+            <button
+              type='submit'
+              className='inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-teal-400 text-base leading-6 font-medium text-white shadow-sm hover:bg-teal-500 focus:outline-none focus:border-teal-200 transition ease-in-out duration-150 sm:text-sm sm:leading-5'
+            >
+              Subscribe
+            </button>
+          </span>
+          <span className='mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto'>
+            <button
+              type='button'
+              onClick={() => setIsVisible(false)}
+              className='inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base leading-6 font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 transition ease-in-out duration-150 sm:text-sm sm:leading-5'
+            >
+              Cancel
+            </button>
+          </span>
+        </div>
+      </Form>
+    </Formik>
   );
 };
 
@@ -41,43 +64,15 @@ function Subscribe() {
   const { isVisible, setIsVisible, ref } = useVisible(false);
   return (
     <div className=''>
-      <button className='btn btn-black m-2 w-32' onClick={() => setIsVisible(true)}>
+      <button
+        className='btn btn-black m-2 w-32'
+        onClick={() => setIsVisible(true)}
+      >
         Subscribe
       </button>
       <Modal isVisible={isVisible}>
         <div ref={ref}>
-          <div className='bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4'>
-            <div className='mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left'>
-              <h3
-                className='text-lg leading-6 font-medium text-gray-900'
-                id='modal-headline'
-              >
-                Subscribe
-              </h3>
-            </div>
-            <div className='m-2'>
-              {/* <SignupForm /> */}
-            </div>
-          </div>
-          <div className='bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse'>
-            <span className='flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto'>
-              <button
-                type='button'
-                className='inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-teal-400 text-base leading-6 font-medium text-white shadow-sm hover:bg-teal-500 focus:outline-none focus:border-teal-200 transition ease-in-out duration-150 sm:text-sm sm:leading-5'
-              >
-                Subscribe
-              </button>
-            </span>
-            <span className='mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto'>
-              <button
-                type='button'
-                onClick={() => setIsVisible(false)}
-                className='inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base leading-6 font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 transition ease-in-out duration-150 sm:text-sm sm:leading-5'
-              >
-                Cancel
-              </button>
-            </span>
-          </div>
+          <SubscribeForm setIsVisible={setIsVisible} />
         </div>
       </Modal>
     </div>
