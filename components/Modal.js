@@ -3,7 +3,7 @@ import Transition from './Transition';
 export default function Modal({ children, isVisible }) {
   return (
     <Transition show={isVisible} appear={true}>
-      <div className='z-40 table fixed top-0 left-0 h-full w-full pt-40'>
+      <div className='z-40 table fixed top-0 left-0 h-full w-full'>
         <Transition
           enter='ease-out duration-300'
           enterFrom='opacity-0'
@@ -24,7 +24,7 @@ export default function Modal({ children, isVisible }) {
           leaveFrom='opacity-100 translate-y-0 sm:scale-100'
           leaveTo='opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95'
         >
-          <div className='table-cell align-top mx-4'>
+          <div className='table-cell align-middle mx-4'>
             <div
               className='bg-white rounded-lg overflow-hidden shadow-xl 
             transform transition-all max-w-xs mx-auto'
