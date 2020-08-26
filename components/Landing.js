@@ -1,9 +1,10 @@
-import { Formik, Form } from 'formik';
-import * as Yup from 'yup';
 import Modal from './Modal';
 import Testimonials from './Testimonials';
 import useVisible from './UseVisible';
-import { TextInput } from './Forms';
+import { UploadResumeForm } from './Forms';
+import { useState } from 'react';
+import Transition from './Transition';
+import CloseSVG from './svg/close';
 
 export default function Landing({ testimonials }) {
   return (
@@ -14,54 +15,9 @@ export default function Landing({ testimonials }) {
   );
 }
 
-const SubscribeForm = ({ setIsVisible }) => {
-  return (
-    <Formik
-      initialValues={{ firstName: '', lastName: '', email: '' }}
-      validationSchema={Yup.object({
-        firstName: Yup.string().max(32, 'Must be 32 characters or less'),
-        lastName: Yup.string().max(64, 'Must be 64 characters or less'),
-        email: Yup.string().email('Invalid email address').required('Required'),
-      })}
-      onSubmit={(values, { setSubmitting }) => {
-        setTimeout(() => {
-          alert(JSON.stringify(values, null, 2));
-          setSubmitting(false);
-        }, 400);
-      }}
-    >
-      <Form>
-        <div className='p-4'>
-          <TextInput label='First Name' name='fistName' type='text' />
-          <TextInput label='Last Name' name='lastName' type='text' />
-          <TextInput label='Email Address' name='email' type='email' />
-        </div>
-        <div className='bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse'>
-          <span className='flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto'>
-            <button
-              type='submit'
-              className='inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-teal-400 text-base leading-6 font-medium text-white shadow-sm hover:bg-teal-500 focus:outline-none focus:border-teal-200 transition ease-in-out duration-150 sm:text-sm sm:leading-5'
-            >
-              Subscribe
-            </button>
-          </span>
-          <span className='mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto'>
-            <button
-              type='button'
-              onClick={() => setIsVisible(false)}
-              className='inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base leading-6 font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 transition ease-in-out duration-150 sm:text-sm sm:leading-5'
-            >
-              Cancel
-            </button>
-          </span>
-        </div>
-      </Form>
-    </Formik>
-  );
-};
-
 function Subscribe() {
   const { isVisible, setIsVisible, ref } = useVisible(false);
+
   return (
     <div className=''>
       <button
@@ -72,7 +28,7 @@ function Subscribe() {
       </button>
       <Modal isVisible={isVisible}>
         <div ref={ref}>
-          <SubscribeForm setIsVisible={setIsVisible} />
+          <UploadResumeForm onCancel={() => setIsVisible(false)} />
         </div>
       </Modal>
     </div>
@@ -94,35 +50,7 @@ function ForEmployers() {
         </button>
         <Modal isVisible={isVisible}>
           <div ref={ref}>
-            <div className='bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4'>
-              <div className='mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left'>
-                <h3
-                  className='text-lg leading-6 font-medium text-gray-900'
-                  id='modal-headline'
-                >
-                  Schedule Meeting
-                </h3>
-              </div>
-            </div>
-            <div className='bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse'>
-              <span className='flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto'>
-                <button
-                  type='button'
-                  className='inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-teal-400 text-base leading-6 font-medium text-white shadow-sm hover:bg-teal-500 focus:outline-none focus:border-teal-200 transition ease-in-out duration-150 sm:text-sm sm:leading-5'
-                >
-                  Schedule
-                </button>
-              </span>
-              <span className='mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto'>
-                <button
-                  type='button'
-                  onClick={() => setIsVisible(false)}
-                  className='inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base leading-6 font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 transition ease-in-out duration-150 sm:text-sm sm:leading-5'
-                >
-                  Cancel
-                </button>
-              </span>
-            </div>
+            <UploadResumeForm onCancel={() => setIsVisible(false)} />
           </div>
         </Modal>
       </div>
@@ -131,6 +59,7 @@ function ForEmployers() {
 }
 
 function ForJobSeekers() {
+  const [didResumeUpload, setDidResumeUpload] = useState(false);
   const { isVisible, setIsVisible, ref } = useVisible(false);
 
   return (
@@ -138,42 +67,48 @@ function ForJobSeekers() {
       <h1 className='text-2xl font-semibold m-2 mb-4'>For Job Seekers</h1>
       <div className='flex justify-center'>
         <button
-          onClick={() => setIsVisible(true)}
+          onClick={() => {
+            setIsVisible(true);
+            setDidResumeUpload(false);
+          }}
           className='m-2 w-56 btn btn-black'
         >
           Upload Resume
         </button>
         <Modal isVisible={isVisible}>
           <div ref={ref}>
-            <div className='bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4'>
-              <div className='mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left'>
-                <h3
-                  className='text-lg leading-6 font-medium text-gray-900'
-                  id='modal-headline'
-                >
-                  Upload Resume
-                </h3>
-              </div>
-            </div>
-            <div className='bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse'>
-              <span className='flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto'>
-                <button
-                  type='button'
-                  className='inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-teal-400 text-base leading-6 font-medium text-white shadow-sm hover:bg-teal-500 focus:outline-none focus:border-teal-200 transition ease-in-out duration-150 sm:text-sm sm:leading-5'
-                >
-                  Upload
-                </button>
-              </span>
-              <span className='mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto'>
-                <button
-                  type='button'
-                  onClick={() => setIsVisible(false)}
-                  className='inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base leading-6 font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 transition ease-in-out duration-150 sm:text-sm sm:leading-5'
-                >
-                  Cancel
-                </button>
-              </span>
-            </div>
+            {didResumeUpload ? (
+              <Transition
+                appear={true}
+                show={true}
+                enter='ease-out duration-500'
+                enterFrom='opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95'
+                enterTo='opacity-100 translate-y-0 sm:scale-100'
+                leave='ease-in duration-300'
+                leaveFrom='opacity-100 translate-y-0 sm:scale-100'
+                leaveTo='opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95'
+              >
+                <div className='relative p-4'>
+                  <button
+                    className='absolute top-2 right-2 h-6 w-6 text-gray-600 focus:outline-none'
+                    onClick={() => setIsVisible(false)}
+                  >
+                    <CloseSVG />
+                  </button>
+                  <h2 className='text-lg mb-2'>
+                    Thanks for uploading the resume! 🎉
+                  </h2>
+                  <p className='font-light pt-2'>
+                    We will try to contact you as soon as possible
+                  </p>
+                </div>
+              </Transition>
+            ) : (
+              <UploadResumeForm
+                onCancel={() => setIsVisible(false)}
+                onSuccess={() => setDidResumeUpload(true)}
+              />
+            )}
           </div>
         </Modal>
       </div>
@@ -182,7 +117,7 @@ function ForJobSeekers() {
 }
 function Banana() {
   return (
-    <main id='about' className='bg-yellow-200 p-2 xl:h-screen'>
+    <main id='about' className='bg-yellow-200 p-2'>
       <div
         className='p-2 mt-16 md:m-16 lg:mt-36 max-w-md sm:max-w-2xl md:max-w-3xl lg:max-w-4xl flex flex-col
         sm:space-x-4 sm:flex-row'

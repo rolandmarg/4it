@@ -27,7 +27,7 @@ export default function Modal({ children, isVisible }) {
           <div className='table-cell align-middle mx-4'>
             <div
               className='bg-white rounded-lg overflow-hidden shadow-xl 
-            transform transition-all max-w-xs mx-auto'
+            transform transition-all max-w-sm mx-auto'
               role='dialog'
               aria-modal='true'
               aria-labelledby='modal-headline'

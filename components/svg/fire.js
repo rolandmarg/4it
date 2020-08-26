@@ -1,4 +1,4 @@
-export default function Fire({ className }) {
+export default function FireSVG({ className }) {
   return (
     <svg
       className={className}
