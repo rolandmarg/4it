@@ -15,7 +15,7 @@ export function UploadResumeForm({ onCancel, onSuccess }) {
   };
 
   const files = getValues('resume');
-  const fileName = files && files && files[0].name;
+  const fileName = files && files[0] && files[0].name;
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
